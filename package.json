@@ -1,0 +1,35 @@
+{
+  "name": "mingraphing",
+  "version": "0.1.0",
+  "description": "A very basic canvas graphing library",
+  "main": "src/mingraphing.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/natfaulk/mingraphing.git"
+  },
+  "keywords": [
+    "node",
+    "js",
+    "graph",
+    "minimal",
+    "lightweight",
+    "html",
+    "canvas"
+  ],
+  "author": "natfaulk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/natfaulk/mingraphing/issues"
+  },
+  "homepage": "https://github.com/natfaulk/mingraphing#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-uglify": "^3.0.0"
+  },
+  "dependencies": {
+    "mindrawingjs": "git+https://github.com/natfaulk/mindrawingjs.git"
+  }
+}

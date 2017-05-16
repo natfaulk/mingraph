@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <title>MinGraphing Example</title>
+  <script src="../node_modules/mindrawingjs/build/mindrawing.min.js"></script>
+  <script src="../build/mingraphing.min.js"></script>
+</head>
+<body>
+  <canvas id="myGraph"></canvas>
+  <script type="text/javascript">
+
+  var graph = new Mingraphing('myGraph', {
+    chartHeight: 200,
+    chartMargin: 10,
+    numberOfCharts: 2,
+    chartWidth: 1200,
+    type: 'line',
+    bipolar: true,
+    drawMargins: true
+  });
+
+
+  const RED = '#FF0000';
+  const GREEN = '#00FF00';
+  const BLUE = '#0000FF';
+
+  var dataset = [];
+
+  for (var i = 0; i < 2000; i++) {
+    dataset.push({
+      'rand': 2 * (Math.random() - 0.5),
+      'sin': Math.sin(i / 20),
+      'saw': ((i % 50) / 25) - 1
+    });
+  }
+
+  graph.addData(dataset, 'rand', RED, 0, 5);
+  graph.addData(dataset, 'sin', GREEN, 0, 2);
+  graph.addData(dataset, 'rand', RED, 1, 5);
+  graph.addData(dataset, 'saw', BLUE, 1, 2);
+
+  </script>
+</body>
+</html>
