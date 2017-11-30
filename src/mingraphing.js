@@ -6,6 +6,8 @@ Mingraphing = function(canvasID, options) {
   var DEFAULT_DRAW_MARGINS = true;
   var DEFAULT_TYPE = 'line'; // line or bar
   var DEFAULT_BIPOLAR = false;
+  var DEFAULT_TOOLTIP = true;
+  var _COL_WHITE = '#FFFFFF';
 
   this._options = {
     chartWidth: DEFAULT_CHART_WIDTH,
@@ -14,11 +16,21 @@ Mingraphing = function(canvasID, options) {
     numberOfCharts: DEFAULT_N_CHARTS,
     drawMargins: DEFAULT_DRAW_MARGINS,
     type: DEFAULT_TYPE,
-    bipolar: DEFAULT_BIPOLAR
+    bipolar: DEFAULT_BIPOLAR,
+    tooltip: DEFAULT_TOOLTIP
   };
 
   for (var opt in options) {
     this._options[opt] = options[opt];
+  }
+
+  this.graphs = {
+    'dataset': [],
+    'colors': [],
+    'keys': [],
+    'labels': [],
+    'chartNumbers': [],
+    'maxVals': []
   }
 
   this.d = new Mindrawingjs();
@@ -27,6 +39,15 @@ Mingraphing = function(canvasID, options) {
   this.d.background('#000');
 
   if (this._options.drawMargins) this._drawMargins();
+  if (this._options.tooltip) {
+    var _this = this;
+    document.onmousemove = function(event) {
+      if (_this.graphs.dataset.length > 0) {
+        _this.draw();
+        _this.drawTooltip(event.pageX, event.pageY);
+      }
+    };
+  }
 };
 
 (function(){
@@ -41,13 +62,54 @@ Mingraphing = function(canvasID, options) {
     }
   };
 
-  Mingraphing.prototype.addData = function(dataset, selector, colour, chartNumber, maxValue) {
-    if (this._options.type == 'line') {
-      this._drawLine(dataset, selector, colour, chartNumber, maxValue);
-    } else if (this._options.type == 'bar') {
-      this._drawBar(dataset, selector, colour, chartNumber, maxValue);
+  Mingraphing.prototype.addData = function(dataset, series, colour, chartNumber, maxValue, label) {
+    this.graphs.colors.push(colour);
+    this.graphs.keys.push(series);
+    this.graphs.labels.push(label);
+    this.graphs.chartNumbers.push(chartNumber);
+    this.graphs.maxVals.push(maxValue);
+    for (var i = 0; i < dataset.length; i++) {
+      if (i >= this.graphs.dataset.length) {
+        this.graphs.dataset.push({});
+      }
+      this.graphs.dataset[i][series] = dataset[i][series];
     }
+
+    this.draw();
   };
+
+  Mingraphing.prototype.draw = function() {
+    this.clear();
+    for (var i = 0; i < this.graphs.keys.length; i++) {
+      if (this._options.type == 'line') {
+        this._drawLine(this.graphs.dataset, this.graphs.keys[i], this.graphs.colors[i], this.graphs.chartNumbers[i], this.graphs.maxVals[i]);
+      } else if (this._options.type == 'bar') {
+        this._drawBar(this.graphs.dataset, this.graphs.keys[i], this.graphs.colors[i], this.graphs.chartNumbers[i], this.graphs.maxVals[i]);        
+      }      
+    }
+  }
+
+  Mingraphing.prototype.drawTooltip = function(_mouseX, _mouseY) {
+    var mouseXadj = _mouseX;
+    if (mouseXadj > 1000) mouseXadj -= 150;
+    
+    var xint = Math.round((this.graphs.dataset.length / this._options.chartWidth) * _mouseX);
+    if (xint >= this.graphs.dataset.length) xint = this.graphs.dataset.length - 1;
+
+    // console.log(event.pageX);
+
+
+    this.d.stroke('#FFFFFF');
+    this.d.line(_mouseX, 0, _mouseX, this._options.numberOfCharts * (this._options.chartHeight + this._options.chartMargin) + this._options.chartMargin);
+    // graph.d.rect(event.pageX, event.pageY, 100, 100);
+    this.d.textSize(20);
+    this.d.fill('#FFFFFF');
+    this.d.text('X: '+ xint, mouseXadj + 5, _mouseY + 25);
+    for (var i = 0; i < this.graphs.keys.length; i++) {
+      this.d.fill(this.graphs.colors[i]);     
+      this.d.text(this.graphs.labels[i] + ': ' + this.graphs.dataset[xint][this.graphs.keys[i]], mouseXadj + 5, _mouseY + 55 + i * 30);
+    }
+  }
 
   Mingraphing.prototype._drawLine = function(dataset, selector, colour, chartNumber, maxValue) {
     var t_x1 = 0;
@@ -87,6 +149,10 @@ Mingraphing = function(canvasID, options) {
   Mingraphing.prototype.clear = function() {
     this.d.background('#000');
     if (this._options.drawMargins) this._drawMargins();
+  };
+
+  Mingraphing.prototype.tooltipEnabled = function(_tooltip) {
+    this._options.tooltip = _tooltip;
   };
 
   if (typeof module !== 'undefined' && module.exports) {

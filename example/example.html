@@ -16,7 +16,8 @@
     chartWidth: 1200,
     type: 'line',
     bipolar: true,
-    drawMargins: true
+    drawMargins: true,
+    tooltip: true
   });
 
 
@@ -34,10 +35,10 @@
     });
   }
 
-  graph.addData(dataset, 'rand', RED, 0, 5);
-  graph.addData(dataset, 'sin', GREEN, 0, 2);
-  graph.addData(dataset, 'rand', RED, 1, 5);
-  graph.addData(dataset, 'saw', BLUE, 1, 2);
+  graph.addData(dataset, 'rand', RED, 0, 5, 'Random');
+  graph.addData(dataset, 'sin', GREEN, 0, 2, 'Sine');
+  graph.addData(dataset, 'rand', RED, 1, 5, 'Random');
+  graph.addData(dataset, 'saw', BLUE, 1, 2, 'Saw');
 
   </script>
 </body>
