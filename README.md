@@ -40,6 +40,12 @@ Adds a dataset to the graph. Data will be added as a new series.
 **maxValue**: The maximum y-value of the graph. Used to scale the data when drawing to the graph.  
 **label**: Series label to display on tooltip
 
+### `Mingraphing.updateData(dataset, selector)`
+Updates the dataset currently displayed on the graph.
+
+**dataset**: JS list holding a JS object for each data point. e.g: `[{a: 10, b: 5}, {a: 15, b: 6}, ... ]`  
+**selector**: Selector to be applied to each object in the dataset list.   
+
 ### `Mingraphing.clear()`
 Clears charts by setting whole canvas to black.
 

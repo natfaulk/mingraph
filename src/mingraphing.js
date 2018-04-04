@@ -1,3 +1,5 @@
+const Mindrawingjs = require('mindrawingjs');
+
 Mingraphing = function(canvasID, options) {
   var DEFAULT_CHART_WIDTH = 800;
   var DEFAULT_CHART_HEIGHT = 600;
@@ -68,6 +70,17 @@ Mingraphing = function(canvasID, options) {
     this.graphs.labels.push(label);
     this.graphs.chartNumbers.push(chartNumber);
     this.graphs.maxVals.push(maxValue);
+    for (var i = 0; i < dataset.length; i++) {
+      if (i >= this.graphs.dataset.length) {
+        this.graphs.dataset.push({});
+      }
+      this.graphs.dataset[i][series] = dataset[i][series];
+    }
+
+    this.draw();
+  };
+
+  Mingraphing.prototype.updateData = function(dataset, series) {
     for (var i = 0; i < dataset.length; i++) {
       if (i >= this.graphs.dataset.length) {
         this.graphs.dataset.push({});
