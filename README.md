@@ -11,7 +11,7 @@ There is also now a tooltip which displays the Y values of each point. It is cur
 
 API Reference
 -------------
-Version: 0.2.0  
+Version: 0.3.0  
 
 ### `Mingraphing(canvasID, options)`
 Initialisation function which takes the drawing canvas and chart options  
