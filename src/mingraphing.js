@@ -19,7 +19,8 @@ Mingraphing = function(canvasID, options) {
     drawMargins: DEFAULT_DRAW_MARGINS,
     type: DEFAULT_TYPE,
     bipolar: DEFAULT_BIPOLAR,
-    tooltip: DEFAULT_TOOLTIP
+    tooltip: DEFAULT_TOOLTIP,
+    xMax: -1
   };
 
   for (var opt in options) {
@@ -89,6 +90,7 @@ Mingraphing = function(canvasID, options) {
     }
 
     this.draw();
+    this.drawTooltip();
   };
 
   Mingraphing.prototype.draw = function() {
@@ -117,7 +119,9 @@ Mingraphing = function(canvasID, options) {
     // graph.d.rect(event.pageX, event.pageY, 100, 100);
     this.d.textSize(20);
     this.d.fill('#FFFFFF');
-    this.d.text('X: '+ xint, mouseXadj + 5, _mouseY + 25);
+    let xLab = xint;
+    if (this._options.xMax > 0) xLab = xint / this.graphs.dataset.length * this._options.xMax;
+    this.d.text('X: '+ xLab, mouseXadj + 5, _mouseY + 25);
     for (var i = 0; i < this.graphs.keys.length; i++) {
       this.d.fill(this.graphs.colors[i]);     
       this.d.text(this.graphs.labels[i] + ': ' + this.graphs.dataset[xint][this.graphs.keys[i]], mouseXadj + 5, _mouseY + 55 + i * 30);
