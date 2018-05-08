@@ -29,6 +29,7 @@ drawMargins | Draws white lines along the edge of the margins | `true`
 type | Type of graph. Either `bar` or `line` | `line`
 bipolar | Allows for data that goes negative | `false`
 tooltip | Shows y values for each data series at mouse x position | `true`
+xMax | The Maximum x value - used to display the correct x value on the tooltip (rather than just the sample number). Disabled if < 0 | `-1`
 
 ### `Mingraphing.addData(dataset, selector, colour, chartNumber, maxValue, label)`
 Adds a dataset to the graph. Data will be added as a new series.
