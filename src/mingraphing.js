@@ -1,4 +1,4 @@
-const Mindrawingjs = require('mindrawingjs');
+var Mindrawingjs = require('mindrawingjs');
 
 Mingraphing = function(canvasID, options) {
   var DEFAULT_CHART_WIDTH = 800;
@@ -36,6 +36,11 @@ Mingraphing = function(canvasID, options) {
     'maxVals': []
   }
 
+  this.lastMouse = {
+    x: -1,
+    y: -1
+  }
+
   this.d = new Mindrawingjs();
   var tHeight = this._options.numberOfCharts * (this._options.chartHeight + this._options.chartMargin) + this._options.chartMargin;
   this.d.setup(canvasID, this._options.chartWidth, tHeight);
@@ -48,6 +53,8 @@ Mingraphing = function(canvasID, options) {
       if (_this.graphs.dataset.length > 0) {
         _this.draw();
         _this.drawTooltip(event.pageX, event.pageY);
+        _this.lastMouse.x = event.pageX;
+        _this.lastMouse.y = event.pageY;
       }
     };
   }
@@ -90,7 +97,7 @@ Mingraphing = function(canvasID, options) {
     }
 
     this.draw();
-    this.drawTooltip();
+    if (this.lastMouse.x >= 0 && this.lastMouse.y >= 0) this.drawTooltip(this.lastMouse.x, this.lastMouse.y);
   };
 
   Mingraphing.prototype.draw = function() {
@@ -119,7 +126,7 @@ Mingraphing = function(canvasID, options) {
     // graph.d.rect(event.pageX, event.pageY, 100, 100);
     this.d.textSize(20);
     this.d.fill('#FFFFFF');
-    let xLab = xint;
+    var xLab = xint;
     if (this._options.xMax > 0) xLab = xint / this.graphs.dataset.length * this._options.xMax;
     this.d.text('X: '+ xLab, mouseXadj + 5, _mouseY + 25);
     for (var i = 0; i < this.graphs.keys.length; i++) {
