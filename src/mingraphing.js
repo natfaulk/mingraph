@@ -112,26 +112,27 @@ Mingraphing = function(canvasID, options) {
   }
 
   Mingraphing.prototype.drawTooltip = function(_mouseX, _mouseY) {
-    var mouseXadj = _mouseX;
+    var bounding = this.d.c.getBoundingClientRect();
+    // _mouseX -= bounding.left;
+    // _mouseY -= bounding.top;
+    var mouseXadj = _mouseX - bounding.left;
     if (mouseXadj > 1000) mouseXadj -= 150;
     
-    var xint = Math.round((this.graphs.dataset.length / this._options.chartWidth) * _mouseX);
+    var xint = Math.round((this.graphs.dataset.length / this._options.chartWidth) * (_mouseX - bounding.left));
     if (xint >= this.graphs.dataset.length) xint = this.graphs.dataset.length - 1;
-
-    // console.log(event.pageX);
-
+    if (xint < 0) xint = 0;
 
     this.d.stroke('#FFFFFF');
-    this.d.line(_mouseX, 0, _mouseX, this._options.numberOfCharts * (this._options.chartHeight + this._options.chartMargin) + this._options.chartMargin);
+    this.d.line(_mouseX - bounding.left, 0, _mouseX - bounding.left, this._options.numberOfCharts * (this._options.chartHeight + this._options.chartMargin) + this._options.chartMargin);
     // graph.d.rect(event.pageX, event.pageY, 100, 100);
     this.d.textSize(20);
     this.d.fill('#FFFFFF');
     var xLab = xint;
     if (this._options.xMax > 0) xLab = xint / this.graphs.dataset.length * this._options.xMax;
-    this.d.text('X: '+ xLab, mouseXadj + 5, _mouseY + 25);
+    this.d.text('X: '+ xLab, mouseXadj + 5, _mouseY + 25 - bounding.top);
     for (var i = 0; i < this.graphs.keys.length; i++) {
       this.d.fill(this.graphs.colors[i]);     
-      this.d.text(this.graphs.labels[i] + ': ' + this.graphs.dataset[xint][this.graphs.keys[i]], mouseXadj + 5, _mouseY + 55 + i * 30);
+      this.d.text(this.graphs.labels[i] + ': ' + this.graphs.dataset[xint][this.graphs.keys[i]], mouseXadj + 5, _mouseY + 55 + i * 30 - bounding.top);
     }
   }
 
